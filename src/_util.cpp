@@ -11,7 +11,10 @@
  */
 void _xor(const uint8_t *a, const uint8_t *b, const uint16_t len, uint8_t *res)
 {
-  // TODO
+  for (uint8_t i = 0; i < len; i++)
+  {
+    res[i] = a[i] ^ b[i];
+  }
 }
 
 /**
@@ -23,7 +26,10 @@ void _xor(const uint8_t *a, const uint8_t *b, const uint16_t len, uint8_t *res)
  */
 void gen_random_block(uint8_t *a)
 {
-  // TODO
+  for (uint8_t i = 0; i < BLOCK_LEN; i++)
+  {
+    a[i] = random(0, 256);
+  }
 }
 
 /**
@@ -36,7 +42,19 @@ void gen_random_block(uint8_t *a)
  */
 bool validate(uint8_t *a, uint8_t *b, uint16_t len)
 {
-  // TODO
+#ifdef DEBUG
+  Serial.print("Comparing: ");
+  print_uint8_arr(a);
+  Serial.print(" to: ");
+  print_uint8_arr(b);
+#endif
+
+  for (uint8_t i = 0; i < len; i++)
+  {
+    if (a[i] != b[i])
+      return false;
+  }
+  return true;
 }
 
 /**
@@ -51,7 +69,8 @@ bool validate(uint8_t *a, uint8_t *b, uint16_t len)
  */
 void decrypt(char *msg, const uint8_t *key, const uint8_t *iv, char *res)
 {
-  // TODO
+  aes128_cbc_dec(key, iv, msg, BLOCK_LEN);
+  strncpy(res, msg, BLOCK_LEN);
 }
 
 /**
@@ -66,5 +85,6 @@ void decrypt(char *msg, const uint8_t *key, const uint8_t *iv, char *res)
  */
 void encrypt(char *msg, const uint8_t *key, const uint8_t *iv, char *res)
 {
-  // TODO
+  aes128_cbc_enc(key, iv, msg, BLOCK_LEN);
+  strncpy(res, msg, BLOCK_LEN);
 }
